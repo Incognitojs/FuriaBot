@@ -59,7 +59,7 @@ export default class DiscordBot {
         this.client.commandCollection = new Collection();
         this.client.commands = [];
 
-        const commandDirectory: any = await readdir('./dist/commands')
+        const commandDirectory: string[] = await readdir('./dist/commands')
 
         const loadCmd = async (file: string, dir?: string) => {
             const command = dir
