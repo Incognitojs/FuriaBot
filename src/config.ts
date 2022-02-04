@@ -9,6 +9,7 @@ class DatabaseOptions implements PoolConfig {
     host = process.env.host;
     user = process.env.user;
     password = process.env.pass;
+    multipleStatements = true
 }
 
 export class Options {

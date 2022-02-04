@@ -6,7 +6,7 @@ export default class Database {
     public database: Pool;
     public databaseOptions: PoolConfig
 
-    constructor(private options: PoolConfig) {};
+    constructor(private options: PoolConfig){};
 
     set state(state: typeof Database.prototype._state) {
         switch (state) {
@@ -15,15 +15,13 @@ export default class Database {
                 this.database.getConnection(e => {
                     if (e) throw new Error(e.message);
                     console.info(
-                        chalk.green(`Database connection established.`, 
-                        chalk.blue(`[USER]:`),
-                        chalk.cyan(`${this.options.user}`), 
-                        chalk.blue(`[HOST]:`), 
-                        chalk.cyan(`${this.options.host}`))
-                        )
+                            chalk.green(`Database connection established.`,
+                            chalk.blue(`[USER]:`),
+                            chalk.cyan(`${this.options.user}`),
+                            chalk.blue(`[HOST]:`),
+                            chalk.cyan(`${this.options.host}`))
+                    )
                 });
-
         }
     }
-
 }

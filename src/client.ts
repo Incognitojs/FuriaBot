@@ -4,6 +4,7 @@ import { lstatSync } from 'fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import { rootGuildID, loadCommandsBoolean } from './config.js';
+import { guildHandler } from './index.js';
 import _dirname from './util/dirname.js';
 import path from 'path';
 import chalk from 'chalk';
@@ -26,6 +27,7 @@ export default class DiscordBot {
                     partials: ["CHANNEL"],
                     intents: [
                         Intents.FLAGS.GUILDS,
+                        Intents.FLAGS.GUILD_MEMBERS,
                         Intents.FLAGS.GUILD_MESSAGES,
                         Intents.FLAGS.DIRECT_MESSAGES,
                         Intents.FLAGS.DIRECT_MESSAGE_TYPING
@@ -38,6 +40,7 @@ export default class DiscordBot {
                             chalk.blue(`[USER]:`),
                             chalk.cyan(`${this.client.user.tag}`))
                     )
+                    guildHandler.getAllGuildContent();
                     this.handleEvents();
                 })
         }

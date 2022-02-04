@@ -46,6 +46,11 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.4.0.tgz#e277e5bdbdf7cb1e20d320f02f5e2ed113cd3185"
   integrity sha512-QppPM/8l3Mawvh4rn9CNEYIU9bxpXUCRMaX9yUpvBk1nMKusLKpfXGDEKExKaPhLzcn3lzil7pR6rnJ11HgeRQ==
 
+"@types/date-and-time@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@types/date-and-time/-/date-and-time-0.13.0.tgz#8252c1a8d166a8baf4e9631321a85e6e5ce59457"
+  integrity sha512-kHEncapIgrqaY8r2tyb19EvdKyhNjwheLl5cYTorsWJtURoI+oGm5ehW8CLAaq4dvu8x9z56FcXqAT4Mm5Nvzw==
+
 "@types/mysql@^2.15.20":
   version "2.15.20"
   resolved "https://registry.yarnpkg.com/@types/mysql/-/mysql-2.15.20.tgz#9b4a3e11391bee82dc96659405d899228c157d19"
@@ -99,6 +104,11 @@ core-util-is@~1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
+
+date-and-time@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/date-and-time/-/date-and-time-2.1.0.tgz#007efa9624684457259f19348b442e45128a6f1c"
+  integrity sha512-X/b2gM7e8zQ7siiE0DhRLeNMpuCkIqec5Jnx4GMk/HWB71a6e5Lz48mH9/GIS/hpLsBRFZfMF1gjXBkY0vq5oA==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
