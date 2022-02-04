@@ -2,7 +2,6 @@ import { monthYear } from '../util/time.js';
 import { db } from '../index.js';
 
 export default class GuildHandler {
-
     public guildContents: any[];
 
     getAllGuildContent() {

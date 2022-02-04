@@ -13,5 +13,6 @@ export type guild = {
     cmd_c_id?: null | string,
     welcome_c_id?: null | string,
     welcome_msg?: null | string,
+    leave_msg?: null | string,
     created_at?: null | string
 }

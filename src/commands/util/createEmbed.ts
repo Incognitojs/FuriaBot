@@ -2,7 +2,6 @@ import { SlashCommandBuilder as Command } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
 
 export default {
-    channelStrict: false,
     permissions: ["ADMINISTRATOR"],
     data: new Command()
         .setName("embed")

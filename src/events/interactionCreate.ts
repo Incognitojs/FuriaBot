@@ -1,21 +1,20 @@
 import { Interaction, Permissions, GuildMember } from 'discord.js';
 import { guildHandler } from '../index.js';
-import type { Client } from '../../index';
+import type { Client, guild } from '../../index';
 
 export default {
     name: "interactionCreate",
     once: false,
     execute: (interaction: Interaction, client: Client) => {
-
-
-        // console.log(guildHandler.guildContents);
-
         /**
          * Getting the guild ID of where
          * the command was ran.
          */
         const guildID: string = interaction.member['guild'].id;
-
+        /**
+         * Current guild.
+         */
+        const guild: guild = guildHandler.guildContents.filter(item => item.guildID === guildID)[0];
         /**
          * The member who ran the command.
          */
@@ -26,8 +25,7 @@ export default {
          * slash command then we just return
          */
         if (!interaction.isCommand()) return;   
-        let { permissions, channelStrict = false, run } = client.commandCollection.get(interaction.commandName).default;
-        
+        let { permissions, run } = client.commandCollection.get(interaction.commandName).default;
         /**
          * Checking if the user has the correct permissions.
          */
@@ -39,6 +37,10 @@ export default {
             }
         }
 
+        if (guild.cmd_c_id && interaction.channel.id !== guild.cmd_c_id)
+            return interaction.reply(`Please use my commands in the correct channel. <#${guild.cmd_c_id}>`);
+
+        
         /**
          * Running the command;
          */
