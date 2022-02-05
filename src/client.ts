@@ -9,14 +9,16 @@ import _dirname from './util/dirname.js';
 import path from 'path';
 import chalk from 'chalk';
 
-import type { Client } from '../index.js';
+import type { Client } from '../index';
 
 
 export default class DiscordBot {
     private token: string | undefined;
     private _state: "login" | undefined;
-
     public client: Client;
+
+    //todo: emojis lists be able to add emojis nigga.
+    public emojis = {};
 
     constructor(token: string) { this.token = token }
 
@@ -36,7 +38,7 @@ export default class DiscordBot {
                 this.client.login(this.token);
                 this.client.once("ready", () => {
                     console.info(
-                        chalk.green(`Discord connection established.`,
+                            chalk.green(`Discord connection established.`,
                             chalk.blue(`[USER]:`),
                             chalk.cyan(`${this.client.user.tag}`))
                     )
@@ -45,6 +47,7 @@ export default class DiscordBot {
                 })
         }
     }
+
 
     async handleEvents() {
         const eventFiles: string[] = (await readdir('./dist/events')).filter(f => f.endsWith(".js"));
@@ -91,9 +94,6 @@ export default class DiscordBot {
 
         await rest.put(Routes.applicationGuildCommands(botID, rootGuildID), { body: this.client.commands }).catch(console.error);
         loadCommandsBoolean && await rest.put(Routes.applicationCommands(botID), { body: [] }).catch(console.error);
-
-        console.log(this.client.commands)
-        console.log(this.client.commandCollection)
 
         return
     }

@@ -35,4 +35,21 @@ export default class GuildHandler {
             () => this.getAllGuildContent()
         )
     }
+
+    updateWelcomeMessageId(guildID: string, channelID: string | boolean) {
+        if (!channelID)
+            db.database.query(
+                "USE discord; UPDATE guilds SET welcome_c_id = ? WHERE guildID = ?",
+                [null, guildID],
+                err => err && console.error(err)
+            )
+
+        db.database.query(
+            "USE discord; UPDATE guilds SET welcome_c_id = ? WHERE guildID = ?",
+            [channelID, guildID],
+            err => err && console.error(err)
+        )
+    }
+
+
 }
