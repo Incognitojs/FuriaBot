@@ -13,7 +13,7 @@ export default {
         if (guild?.welcome_c_id) {
             leaveMsg = guild?.leave_msg
                 ? guild?.leave_msg
-                : `<@${member.id}> left`;
+                : `[-] <@${member.id}>`;
 
             const welcomeChannel = client.channels.cache.get(guild?.welcome_c_id) as TextChannel;
             welcomeChannel.send({

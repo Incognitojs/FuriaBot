@@ -36,7 +36,7 @@ export default class DiscordBot {
                 this.client.login(this.token);
                 this.client.once("ready", () => {
                     console.info(
-                            chalk.green(`Discord connection established.`,
+                        chalk.green(`Discord connection established.`,
                             chalk.blue(`[USER]:`),
                             chalk.cyan(`${this.client.user.tag}`))
                     )
@@ -64,29 +64,37 @@ export default class DiscordBot {
 
         const commandDirectory: string[] = await readdir('./dist/commands')
 
-        const loadCmd = async (file: string, dir?: string) => {
-            const command = dir
-                          ? await import(`./commands/${dir}/${file}`).catch(console.error)
-                          : await import(`./commands/${file}`).catch(console.error);
-
-            console.info(chalk.green("Loaded command: "), chalk.blue(`${command.default.data.name}`))
-            this.client.commandCollection.set(command.default.data.name, command);
-            this.client.commands.push(command.default.data.toJSON());
-        }
+        const loadCmd = async (file: string, dir?: string) =>
+            new Promise(async resolve => {
+                const command = dir
+                    ? await import(`./commands/${dir}/${file}`).catch(console.error)
+                    : await import(`./commands/${file}`).catch(console.error);
+                this.client.commandCollection.set(command.default.data.name, command);
+                this.client.commands.push(command.default.data.toJSON());
+                console.info(chalk.green("Loaded command: "), chalk.blue(`${command.default.data.name}`))
+                resolve(true);
+            })
 
         for (const item of commandDirectory) {
             const stat = lstatSync(path.join(_dirname, '../commands', item));
             if (stat.isDirectory()) {
                 const commandFiles = (await readdir(`./dist/commands/${item}`)).filter(f => f.endsWith('.js'));
-                for (const file of commandFiles) loadCmd(file, item);
+                for (const file of commandFiles) {
+                    await loadCmd(file, item);
+                }
             }
-            item.endsWith('.js') && loadCmd(item);
+            item.endsWith('.js') && await loadCmd(item);
         }
 
         const rest: REST = new REST({ version: '9' }).setToken(this.token)
         const botID: string = this.client.user.id;
 
         await rest.put(Routes.applicationGuildCommands(botID, rootGuildID), { body: this.client.commands }).catch(console.error);
-        loadCommandsBoolean && await rest.put(Routes.applicationCommands(botID), { body: this.client.commands }).catch(console.error);
+        loadCommandsBoolean && await rest.put(Routes.applicationCommands(botID), { body: [] }).catch(console.error);
+
+        console.log(this.client.commands)
+        console.log(this.client.commandCollection)
+
+        return
     }
 }

@@ -8,10 +8,8 @@ export default {
     once: false,
     execute: (member: GuildMember, client: Client) => {
         const guild: guild = guildHandler.guildContents.filter(item => item.guildID === member.guild.id)[0];
-
-        let welcomeMsg: string;
-
         if (guild?.welcome_c_id) {
+            let welcomeMsg: string;
             welcomeMsg = guild?.welcome_msg
                 ? guild?.welcome_msg
                 : `Welcome to **${guild.guildName}**, <@${member.id}>!`;
