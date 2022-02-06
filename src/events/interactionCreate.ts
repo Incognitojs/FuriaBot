@@ -10,7 +10,7 @@ export default {
          * Getting the guild ID of where
          * the command was ran.
          */
-        const guildID: string = interaction.member['guild'].id;
+        const guildID: string = interaction.guild.id;
         /**
          * Current guild.
          */
@@ -37,14 +37,14 @@ export default {
             }
         }
 
-        if (guild.cmd_c_id && interaction.channel.id !== guild.cmd_c_id)
+        if (guild?.cmd_c_id && interaction.channel.id !== guild?.cmd_c_id)
             return interaction.reply(`Please use my commands in the correct channel. <#${guild.cmd_c_id}>`);
 
         
         /**
          * Running the command;
          */
-        return run(interaction);
+        return run(interaction, guild);
 
     }
 }

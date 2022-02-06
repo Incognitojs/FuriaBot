@@ -15,6 +15,46 @@ export default class GuildHandler {
         )
     }
 
+
+    //TODO: work on this!!* 
+    updateSpecificGuildContent(guildID: string) {
+        db.database.query(
+            "USE discord; SELECT * from guilds WHERE guildID = ?",
+            [guildID],
+            (err, results) => {
+
+            //    console.log(results[1],"res")
+
+                if (err) throw new Error(err.message);
+
+                //this.guildContents.filter(item => item.guildID = results[1].guildID)
+
+
+                // for (let i = this.guildContents.length - 1; i >= 0; --i) {
+                //     if (this.guildContents[i].guildID === guildID) {
+                //         this.guildContents.splice(i,1)
+                //     }
+                // }
+
+                const newContents = this.guildContents.filter((item) => {
+
+                    //console.log(item.guildID, "item");
+                    // console.log("---------------------------------------------------")
+                    console.log(results[1][0].guildID, "result")
+
+                    return item => item.guildID !== results[1].guildID
+                });
+
+              //  console.log("new contents", this.guildContents , "new contents");
+
+           //     this.guildContents = [...newContents, results[1]]
+
+            //    console.log(this.guildContents, "guild contents")
+                return 
+            }
+        )
+    }
+
     guildExistsInDatabase(guildID: string) {
         return new Promise(resolve =>
             db.database.query(
@@ -32,23 +72,19 @@ export default class GuildHandler {
         db.database.query(
             "USE discord; INSERT INTO guilds (guildID, guildName, ownerName, created_at) VALUES (?,?,?,?)",
             [guildID, guildName, ownerName, monthYear()],
-            () => this.getAllGuildContent()
+            err => err ? console.error(err.message) : this.getAllGuildContent()
         )
     }
 
     updateWelcomeMessageId(guildID: string, channelID: string | boolean) {
-        if (!channelID)
-            db.database.query(
-                "USE discord; UPDATE guilds SET welcome_c_id = ? WHERE guildID = ?",
-                [null, guildID],
-                err => err && console.error(err)
-            )
-
         db.database.query(
             "USE discord; UPDATE guilds SET welcome_c_id = ? WHERE guildID = ?",
-            [channelID, guildID],
-            err => err && console.error(err)
+            [channelID === false ? null : channelID, guildID],
+            err => err && console.error(err.message)
         )
+
+        this.updateSpecificGuildContent(guildID);
+
     }
 
 
