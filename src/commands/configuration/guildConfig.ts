@@ -1,5 +1,5 @@
 import { SlashCommandBuilder as Command } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import { CommandInteraction, Channel } from 'discord.js';
 import { guildHandler } from '../../index.js';
 import type { guild } from '../../../index';
 
@@ -8,7 +8,6 @@ export default {
     data: new Command()
         .setName("config")
         .setDescription("Some configuration options")
-
         .addSubcommandGroup(option =>
             option.setName("toggle")
                 .setDescription("Enable and disable certain features")
@@ -49,29 +48,45 @@ export default {
         )
     ,
 
+
     run: (interaction: CommandInteraction, guild: guild) => {
 
-        if (interaction.options.getSubcommand() === 'greetings') {
-            const choice: string = interaction.options.getString("toggle");
-            const channel = interaction.options.getChannel("channel");
-            if (channel.type !== "GUILD_TEXT") return interaction.reply("Provided channel must be a **Text** channel.")
+        let choice: string;
+        let channel: Channel;
+        let message: string;
 
-            if (choice === "disable" && !guild.welcome_c_id)
-                return interaction.reply("You would need to enable welcome / leave messages in order to disable them.")
+        switch (interaction.options.getSubcommand()) {
 
-            guildHandler.updateWelcomeMessageId(interaction.guild.id, choice === "enable" ? channel.id : false)
+            case 'greetings':
+                choice = interaction?.options?.getString("toggle")
+                channel = interaction?.options?.getChannel("channel") as Channel
+                if (channel.type !== "GUILD_TEXT") return interaction.reply("Provided channel must be a **Text** channel.")
+                if (choice === "disable" && !guild.welcome_c_id) return interaction.reply({ content: "This configuration option is not currently enabled.", ephemeral: true })
 
-            const messageToSendBack: string = choice === "enable"
-                ? `**Enabled** <a:check:939414542318972989> \nI will welcome and dismiss people in <#${channel.id}>. You can change the default messages with \`/config edit message\``
-                : `**Disabled** <a:check:939414542318972989> \nI will stop welcoming and dismissing people. <#${guild.welcome_c_id}>`
+                guildHandler.updateWelcomeMessageId(interaction.guild.id, choice === "enable" ? channel.id : false)
 
-            return interaction.reply({
-                embeds: [{
-                    color: choice === "enable" ? '#22c55e' : '#ef4444',
-                    description: messageToSendBack
+                return interaction.reply({
+                    embeds: [{
+                        color: choice === "enable" ? '#22c55e' : '#ef4444',
+                        description: choice === "enable"
+                            ? `**Enabled** <a:check:939414542318972989> \nI will welcome and dismiss people in <#${channel.id}>. You can change the default messages with \`/config edit message\``
+                            : `**Disabled** <a:check:939414542318972989> \nI will no longer use <#${guild.welcome_c_id}> to welcome and dismiss people.`
+                    }],
+                    ephemeral: true
+                })
 
-                }]
-            })
+            case 'message':
+                choice = interaction.options.getString('edit');
+                message = interaction.options.getString("message");
+                return interaction.reply({
+                    embeds: [{
+                        color: '#22c553',
+                        description: `**New message set <a:check:939414542318972989>**
+                                    Here's an example of how users will be ${choice === 'welcome' ? "welcomed" : "dismissed"} with your new message:\n 
+                                    > ${message.search(/<@>/g) ? message.replace(/<@>/g, `<@${interaction.user.id}>`) : message}`
+                    }],
+                    ephemeral: true
+                })
 
         }
 
