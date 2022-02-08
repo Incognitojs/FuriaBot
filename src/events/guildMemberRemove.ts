@@ -12,7 +12,7 @@ export default {
 
         if (guild?.welcome_c_id) {
             leaveMsg = guild?.leave_msg
-                ? guild?.leave_msg
+                ? guild?.leave_msg.search(/<@>/g) ? guild?.leave_msg.replace(/<@>/g, `<@${member.id}>`) : guild?.leave_msg
                 : `[-] <@${member.id}>`;
 
             const welcomeChannel = client.channels.cache.get(guild?.welcome_c_id) as TextChannel;

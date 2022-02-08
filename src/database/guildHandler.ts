@@ -1,8 +1,9 @@
 import { monthYear } from '../util/time.js';
 import { db } from '../index.js';
+import type { guild } from '../../index';
 
 export default class GuildHandler {
-    public guildContents: any[];
+    public guildContents: Array<guild>;
 
     /**
      * Getting every guild stored in database
@@ -19,6 +20,7 @@ export default class GuildHandler {
             }
         )
     }
+
 
     /**
      * Updating a specific guild's contents in the guildContents array.
@@ -37,7 +39,7 @@ export default class GuildHandler {
         )
     }
 
-    
+
     /**
      * Checking if a specified guild exists
      * within the database.
@@ -55,6 +57,7 @@ export default class GuildHandler {
             ))
     }
 
+
     /**
      * Inserting a new guild into the database
      * when the bot is invited to a new guild.
@@ -67,6 +70,7 @@ export default class GuildHandler {
         )
     }
 
+
     /**
      * Setting the welcome message channel ID, this function is 
      * called when a admin enables welcome / leave messages within
@@ -78,10 +82,11 @@ export default class GuildHandler {
             [channelID === false ? null : channelID, guildID],
             err => {
                 if (err) throw new Error(err.message)
-                return  this.updateSpecificGuildContent(guildID);
-            }  
+                return this.updateSpecificGuildContent(guildID);
+            }
         )
     }
+
 
     /**
      * Updating the welcome_msg row in the database,
@@ -96,6 +101,4 @@ export default class GuildHandler {
             err => err ? console.error(err.message) : this.updateSpecificGuildContent(guildID)
         )
     }
-
-
 }
