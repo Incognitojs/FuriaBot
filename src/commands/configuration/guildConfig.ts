@@ -78,11 +78,14 @@ export default {
             case 'message':
                 choice = interaction.options.getString('edit');
                 message = interaction.options.getString("message");
+
+                guildHandler.updateWelcomeMessage(interaction.guild.id, message, choice);
+
                 return interaction.reply({
                     embeds: [{
                         color: '#22c553',
                         description: `**New message set <a:check:939414542318972989>**
-                                    Here's an example of how users will be ${choice === 'welcome' ? "welcomed" : "dismissed"} with your new message:\n 
+                                    Here's an example of how users will be *${choice === 'welcome' ? "welcomed" : "dismissed"}* with your new message:\n 
                                     > ${message.search(/<@>/g) ? message.replace(/<@>/g, `<@${interaction.user.id}>`) : message}`
                     }],
                     ephemeral: true
