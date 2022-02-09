@@ -73,7 +73,7 @@ export default class DiscordBot {
                     ? await import(`./commands/${dir}/${file}`).catch(console.error)
                     : await import(`./commands/${file}`).catch(console.error);
                 this.client.commandCollection.set(command.default.data.name, command);
-                this.client.commands.push(command.default.data.toJSON());
+                this.client.commands.push(command.default.data);
                 console.info(chalk.green("Loaded command: "), chalk.blue(`${command.default.data.name}`))
                 resolve(true);
             })

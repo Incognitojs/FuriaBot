@@ -5,7 +5,7 @@ import type { Client, guild } from '../../index';
 export default {
     name: "interactionCreate",
     once: false,
-    execute: (interaction: Interaction, client: Client) => {
+    execute: async (interaction: Interaction, client: Client) => {
         /**
          * Getting the guild ID of where
          * the command was ran.
@@ -18,7 +18,7 @@ export default {
         /**
          * The member who ran the command.
          */
-        const member = interaction.member as GuildMember;
+        const member = await interaction.guild.members.fetch(interaction.user.id);
 
         /**
          * If the interaction is not a 
@@ -32,13 +32,32 @@ export default {
         if (permissions) {
             if (typeof permissions === "string") permissions = [permissions];
             for (const perm of permissions) {
+
+                /**
+                 * Checking bots permissions.
+                 */
+                if (!member.guild.me.permissions.has(perm))
+                    return interaction.reply({
+                        content: `**I** am lacking the required permission: **${perm}** <:error:940632365921873980>`,
+                        ephemeral: true,
+                    })
+
+                /**
+                 * Checking users permissions.
+                 */
                 if (!member.permissions.has(perm))  
-                    return interaction.reply(`You are lacking the permission: **${perm}**`);
+                    return interaction.reply({
+                        content: `You are lacking the permission: **${perm}** <:error:940632365921873980>`,
+                        ephemeral: true
+                    });
             }
         }
 
         if (guild?.cmd_c_id && interaction.channel.id !== guild?.cmd_c_id)
-            return interaction.reply(`Please use my commands in the correct channel. <#${guild.cmd_c_id}>`);
+            return interaction.reply({
+                content: `Please use my commands in the correct channel. <#${guild.cmd_c_id}> <:error:940632365921873980>`,
+                ephemeral: true
+            });
 
         
         /**

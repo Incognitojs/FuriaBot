@@ -1,0 +1,114 @@
+{
+    "command": {
+        "config": {
+            "data": {
+                "name": "config",
+                "description": "Configure me for your needs.",
+                "options": [
+                    {
+                        "name": "greetings",
+                        "description": "configure the greeting settings.",
+                        "type": 2,
+                        "options": [
+                            {
+                                "name": "toggle",
+                                "description": "toggle greeting / leave messages",
+                                "type": 1,
+                                "options": [
+                                    {
+                                        "name": "option",
+                                        "description": "Enable or disable",
+                                        "type": 3,
+                                        "required": true,
+                                        "choices": [
+                                            {
+                                                "name": "enable",
+                                                "value": "enable"
+                                            },
+                                            {
+                                                "name": "disable",
+                                                "value": "disable"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "channel",
+                                        "description": "select the text channel you want me to welcome and dmismiss people in",
+                                        "type": 7,
+                                        "required": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "edit",
+                                "description": "edit the welcome / leave message",
+                                "type": 1,
+                                "options": [
+                                    {
+                                        "name": "option",
+                                        "description": "pick which message you want to edit.",
+                                        "type": 3,
+                                        "required": true,
+                                        "choices": [
+                                            {
+                                                "name": "welcome message",
+                                                "value": "welcome"
+                                            },
+                                            {
+                                                "name": "dismiss message",
+                                                "value": "dismiss"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "message",
+                                        "description": "The message you would like the user to see when they join or leave",
+                                        "type": 3,
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "kick": {
+            "data": {
+                "name": "kick",
+                "type": 1,
+                "description": "Kick a user from the guild",
+                "options": [
+                    {
+                        "name": "user",
+                        "description": "the user you want to kick",
+                        "type": 6,
+                        "required": true
+                    },
+                    {
+                        "name": "silent",
+                        "description": "Show you kicked the user publicly or do it in silent.",
+                        "type": 3,
+                        "required": true,
+                        "choices": [
+                            {
+                                "name": "true",
+                                "value": "true"
+                            },
+                            {
+                                "name": "false",
+                                "value": "false"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "reason",
+                        "description": "specify the reason for kicking the user",
+                        "type": 3,
+                        "required": false
+                    }
+                ]
+            }
+        }
+    }
+}
