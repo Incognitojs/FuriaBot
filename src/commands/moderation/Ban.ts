@@ -15,6 +15,11 @@ export default {
         const user = await interaction.guild.members.fetch(mem.id);
         const currentDate: number = Date.now();
 
+        
+        /**
+         * The date of when the user will be unbanned.
+         * example: keep checking for this date until it has came, then unban the user.
+         */
         let duration: number;
         let durationString: string;
 
@@ -73,7 +78,9 @@ export default {
             }]
         }).catch(() => null);
 
-        try { await user.ban() }
+        try {
+            await user.ban()
+        }
         catch {
             return interaction.reply({
                 content: "I was not able ban this user. <:error:940632365921873980>",
@@ -81,7 +88,7 @@ export default {
             })
         }
 
-        return interaction.reply({
+        interaction.reply({
             embeds: [{
                 color: '#ef4444',
                 author: {
@@ -95,6 +102,8 @@ export default {
                 }
             }], ephemeral: silent === "true" ? true : false
         })
+
+        return;
 
     }
 }
