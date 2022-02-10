@@ -8,17 +8,12 @@ import { guildHandler } from './index.js';
 import _dirname from './util/dirname.js';
 import path from 'path';
 import chalk from 'chalk';
-
 import type { Client } from '../index';
-
 
 export default class DiscordBot {
     private token: string | undefined;
     private _state: "login" | undefined;
     public client: Client;
-
-    //todo: emojis lists be able to add emojis nigga.
-    public emojis = {};
 
     constructor(token: string) { this.token = token }
 

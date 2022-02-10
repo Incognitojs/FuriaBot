@@ -17,7 +17,7 @@ export default {
 
             await mem.send({
                 embeds: [{
-                    color: '#dc2626',
+                    color: '#f97316',
                     author: {
                         name: `${guild.guildName}`,
                         icon_url: interaction.guild.iconURL(),
@@ -34,12 +34,12 @@ export default {
 
             return interaction.reply({
                 embeds: [{
-                    color: '#dc2626',
+                    color: '#f97316',
                     author: {
                         name: `${guild.guildName}`,
                         icon_url: interaction.guild.iconURL()
                     },
-                    description: `<@${user.id}> has been removed for: \`${reason}\``,
+                    description: `<@${user.id}> has been removed, reason: \`${reason}\``,
                     timestamp: new Date(),
                     footer: {
                         text: `Removed by ${interaction.user.tag}`

@@ -7,17 +7,16 @@ export default {
     permissions: ["ADMINISTRATOR"],
     data: en_text.command.config.data,
     run: (interaction: CommandInteraction, guild: guild) => {
-
         let choice: string;
-        let channel: Channel;
         let message: string;
+        let channel: Channel;
 
         switch (interaction.options.getSubcommandGroup()) {
-            
+
             case 'greetings':
 
                 switch (interaction.options.getSubcommand()) {
-            
+
                     case "toggle":
                         choice = interaction?.options?.getString("option")
                         channel = interaction?.options?.getChannel("channel") as Channel;
