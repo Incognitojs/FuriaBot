@@ -44,7 +44,7 @@ export default {
                     name: `${guild.guildName}`,
                     icon_url: interaction.guild.iconURL()
                 },
-                description: `<@${user.id}> has been removed${reason ? `, reason: \`${reason}\`` : ""}`,
+                description: `<@${user.id}> has been **removed**${reason ? `, reason: \`${reason}\`` : ""}`,
                 timestamp: new Date(),
                 footer: {
                     text: `Removed by ${interaction.user.tag}`
