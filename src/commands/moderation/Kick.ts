@@ -1,41 +1,31 @@
 import { CommandInteraction } from 'discord.js';
 import { en_text } from '../../config.js';
+import { guildHandler } from '../../index.js';
 import type { guild } from '../../../index';
+
 
 export default {
     permissions: "KICK_MEMBERS",
     data: en_text.command.kick.data,
-
     run: async (interaction: CommandInteraction, guild: guild) => {
         const reason: string = interaction.options.getString("reason");
         const silent = interaction.options.getString("silent");
         const mem = interaction.options.getUser("user");
         const user = await interaction.guild.members.fetch(mem.id);
 
-        await mem.send({
-            embeds: [{
-                color: '#f97316',
-                author: {
-                    name: `${guild.guildName}`,
-                    icon_url: interaction.guild.iconURL(),
-                },
-                description: `You have been **removed** ${reason ? `for the following reason(s): \`${reason}\`` : ""}`,
-                timestamp: new Date(),
-                footer: {
-                    text: `Kicked by: ${interaction.user.tag}`
-                }
-            }]
-        }).catch(() => null);
+        const userIsKicked = await guildHandler.kickUser(
+            reason,
+            guild.guildName,
+            interaction.guild.iconURL(),
+            user,
+            interaction.user.tag
+        );
 
-        try {
-            await user.kick();
-        }
-        catch {
+        if (!userIsKicked)
             return interaction.reply({
                 content: "I was not able kick this user. <:error:940632365921873980>",
                 ephemeral: true
             })
-        }
 
         interaction.reply({
             embeds: [{

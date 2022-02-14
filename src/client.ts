@@ -15,7 +15,10 @@ export default class DiscordBot {
     private _state: "login" | undefined;
     public client: Client;
 
-    constructor(token: string) { this.token = token }
+    constructor(token: string) { 
+        this.token = token
+        this.state = "login";
+    }
 
     set state(state: typeof DiscordBot.prototype._state) {
         switch (state) {
@@ -39,6 +42,7 @@ export default class DiscordBot {
                     )
                     guildHandler.getAllGuildContent();
                     this.handleEvents();
+
                 })
         }
     }

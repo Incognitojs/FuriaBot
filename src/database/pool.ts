@@ -6,7 +6,9 @@ export default class Database {
     public database: Pool;
     public databaseOptions: PoolConfig
 
-    constructor(private options: PoolConfig){};
+    constructor(private options: PoolConfig) {
+        this.state = "connect"
+    };
 
     set state(state: typeof Database.prototype._state) {
         switch (state) {
