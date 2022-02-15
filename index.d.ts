@@ -5,7 +5,6 @@ export interface Client extends Client {
     commandCollection: Collection<any>;
 }
 
-
 export type guild = {
     guildID: string,
     guildName: string,

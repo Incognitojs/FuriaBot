@@ -73,6 +73,49 @@
                 ]
             }
         },
+        "mute": {
+            "data": {
+                "name": "mute",
+                "type": 1,
+                "description": "Mute a user.",
+                "options": [
+                    {
+                        "name": "user",
+                        "description": "select the user you want to mute",
+                        "type": 6,
+                        "required": true
+                    },
+                    {
+                        "name": "silent",
+                        "description": "show that you kicked the user publicly or do it in silent",
+                        "type": 3,
+                        "required": true,
+                        "choices": [
+                            {
+                                "name": "true",
+                                "value": "true"
+                            },
+                            {
+                                "name": "false",
+                                "value": "false"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "reason",
+                        "description": "specify the reason for kicking the user",
+                        "type": 3,
+                        "required": false
+                    },
+                    {
+                        "name": "duration",
+                        "description": "how long you want to mute the user for",
+                        "type": 3,
+                        "required": false
+                    }
+                ]
+            }
+        },
         "kick": {
             "data": {
                 "name": "kick",

@@ -51,3 +51,11 @@ export const durationChoiceConvert = (durationChoice: string) => {
     }
 
 }
+
+export const convertMuteTime = (durationString: string) => {
+
+    console.log(durationString)
+
+
+    return;
+};

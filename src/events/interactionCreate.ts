@@ -20,11 +20,45 @@ export default {
          */
         const member = await interaction.guild.members.fetch(interaction.user.id);
 
+        if (interaction.isButton()) {
+            switch (interaction.customId) {
+                case "create_mute_role":
+                    const mutedRole = interaction.guild.roles.cache.find(role => role.name === "muted");
+                    if (mutedRole) return interaction.reply({
+                        content: "It appears there is already a **muted** role within this guild.",
+                        ephemeral: true
+                    })
+
+                    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) 
+                        return interaction.reply({
+                            content: `<:error:940632365921873980> I am lacking the required permission(s): **MANAG_ROLES**}`,
+                            ephemeral: true
+                        })
+                    
+                    const newMutedRole = await interaction.guild.roles.create({
+                        name: "muted",
+                        color: "#18181b",
+                        permissions: [],
+                    })
+                    
+                
+                    newMutedRole.setPermissions([
+                        Permissions.FLAGS.VIEW_CHANNEL
+                    ])
+
+                    return interaction.reply({
+                        content: "button clicked",
+                        ephemeral: true,
+                    })
+
+            }
+        }
+
         /**
          * If the interaction is not a 
          * slash command then we just return
          */
-        if (!interaction.isCommand()) return;   
+        if (!interaction.isCommand()) return;
         let { permissions, run } = client.commandCollection.get(interaction.commandName).default;
         /**
          * Checking if the user has the correct permissions.
@@ -45,7 +79,7 @@ export default {
                 /**
                  * Checking users permissions.
                  */
-                if (!member.permissions.has(perm))  
+                if (!member.permissions.has(perm))
                     return interaction.reply({
                         content: `You are lacking the permission: **${perm}** <:error:940632365921873980>`,
                         ephemeral: true
@@ -59,7 +93,7 @@ export default {
                 ephemeral: true
             });
 
-        
+
         /**
          * Running the command;
          */

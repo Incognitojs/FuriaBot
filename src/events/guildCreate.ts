@@ -42,7 +42,7 @@ export default {
                     }]
                 }]
 
-            }).catch()
+            }).catch(() => null)
             return;
         }
         console.log(

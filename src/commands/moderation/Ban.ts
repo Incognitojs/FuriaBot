@@ -8,7 +8,6 @@ export default {
     permissions: "BAN_MEMBERS",
     data: en_text.command.ban.data,
     run: async (interaction: CommandInteraction, guild: guild) => {
-
         const reason: string = interaction.options.getString("reason");
         const silent = interaction.options.getString("silent");
         const durationChoice = interaction.options.getString("duration");
@@ -16,38 +15,29 @@ export default {
         const user = await interaction.guild.members.fetch(mem.id);
 
         const { duration, durationString } = durationChoiceConvert(durationChoice);
+        const banIsPermanent: boolean = durationString === "Permanent" ? true : false
         const userIsBanned = await guildHandler.banUser(
             user,
             duration,
             interaction.user.tag,
-            reason, durationString,
-            interaction.guild.iconURL(),
+            reason, 
+            durationString,
             interaction.guild.name,
+            banIsPermanent
         )
 
         if (!userIsBanned) {
             return interaction.reply({
-                content: "I was not able to ban this user. <:error:940632365921873980>",
+                content: "> <:error:940632365921873980> I was not able to ban this user.",
                 ephemeral: true
             })
         }
 
         interaction.reply({
-            embeds: [{
-                color: '#ef4444',
-                author: {
-                    name: `${guild.guildName}`,
-                    icon_url: interaction.guild.iconURL()
-                },
-                description: `<@${user.id}> has been **banned ${durationString === "Permanent" ? "Permanently" : ""}**${reason ? `, reason: \`${reason}\`` : ""}${durationString !== "Permanent" ? `, Duration: \`${durationString}\`` : ""}`,
-                timestamp: new Date(),
-                footer: {
-                    text: `banned by ${interaction.user.tag}`
-                }
-            }], ephemeral: silent === "true" ? true : false
+            content: `> <:error:940632365921873980> <@${user.id}> has been ${banIsPermanent ? "**Permanently**": ""} **Banned** from the guild **${interaction.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${!banIsPermanent ? `\`Duration\`: ${durationString}`:""}`,
+            ephemeral: silent === "true" ? true: false
         })
-
+        
         return;
-
     }
 }

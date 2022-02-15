@@ -1,7 +1,8 @@
 import { monthYear } from '../util/time.js';
 import { Pool } from 'mysql';
 import { discordBot } from '../index.js';
-import { GuildMember, User } from 'discord.js';
+import { GuildMember, Role } from 'discord.js';
+import { convertMuteTime } from '../util/convertTime.js';
 import type { guild } from '../../index';
 
 export default class GuildHandler {
@@ -108,38 +109,27 @@ export default class GuildHandler {
 
 
     /**
+     * Muting a user
+    */
+    muteUser(member: GuildMember, mutedRole: Role | undefined, duration: string, reason: string) {
+        return new Promise(async resolve => {
+           // await member.roles.add(mutedRole).catch(() => resolve(false));
+            await member.send(`> <:error:940632365921873980> You have been **muted** in the guild **${member.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${duration ? `\`duration:\` ${duration}` : ""}`).catch(() => null);
+            
+            convertMuteTime(duration)
+
+            resolve(true);
+        })
+    }
+
+    /**
      * Kicking a user.
      */
-    kickUser(
-        reason: string | null | undefined,
-        guildName: string,
-        guildIconUrl: string,
-        user: GuildMember,
-        kickedBy: string
-    ) {
+    kickUser(reason: string | undefined, guildName: string, guildIconUrl: string, user: GuildMember) {
         return new Promise(async resolve => {
-            await user.send({
-                embeds: [{
-                    color: '#f97316',
-                    author: {
-                        name: `${guildName}`,
-                        icon_url: guildIconUrl,
-                    },
-                    description: `You have been **removed** ${reason ? `for the following reason(s): \`${reason}\`` : ""}`,
-                    timestamp: new Date(),
-                    footer: {
-                        text: `Kicked by: ${kickedBy}`
-                    }
-                }]
-            }).catch(() => null);
-
-            try {
-               //await user.kick();
-                resolve(true);
-            }
-            catch {
-                resolve(false);
-            }
+            await user.send(`> <:error:940632365921873980> You have been **Kicked** from the guild **${guildName}** ${reason ? `\`reason:\` ${reason}` : ""}`).catch(() => null)         
+            await user.kick().catch(() => resolve(false));
+            resolve(true)            
         })
     }
 
@@ -152,27 +142,12 @@ export default class GuildHandler {
         bannedBy: string,
         reason: string,
         durationString: string,
-        guildIcon: string,
-        guildName: string
+        guildName: string,
+        banIsPermanent: boolean
     ) {
         return new Promise(async resolve => {
             if (!user.bannable) return resolve(false);
-
-            await user.send({
-                embeds: [{
-                    color: '#ef4444',
-                    author: {
-                        name: `${guildName}`,
-                        icon_url: guildIcon
-                    },
-                    description: `You have been **banned ${durationString === "Permanent" ? "Permanently" : ""}**${reason ? `, reason: \`${reason}\`` : ""}${durationString !== "Permanent" ? `, Duration: \`${durationString}\`` : ""}`,
-                    timestamp: new Date(),
-                    footer: {
-                        text: `banned by ${bannedBy}`
-                    }
-                }]
-            }).catch(() => null);
-
+            await user.send(`> <:error:940632365921873980> You have been ${banIsPermanent ? "**Permanently**" : ""} **Banned** from the guild **${guildName}** ${reason ? `\`reason:\` ${reason}.` : ""} ${!banIsPermanent ? `\`Duration\`: ${durationString}` : ""}`)
             await user.ban().catch(() => resolve(false));
             this.db.query(
                 "USE discord; INSERT IGNORE INTO banned (guildID,guildName,bannedID,userBanned,bannedBy,reason,duration) VALUES(?,?,?,?,?,?,?)",
@@ -186,7 +161,6 @@ export default class GuildHandler {
                 }
             )
         })
-
     }
 
 
@@ -207,16 +181,10 @@ export default class GuildHandler {
 
                         this.db.query(
                             "USE discord; DELETE FROM banned WHERE guildID = ? AND bannedID = ?",
-                            [user_row.guildID, user_row.bannedID],
-                            e => {
-                                if (e) return console.error(e.message)
-                                console.log(`unbanned user: ${user_row.userBanned}(${user_row.bannedID}) from guild: ${user_row.guildName}(${user_row.guildID})`);
-                            }
+                            [user_row.guildID, user_row.bannedID]
                         )
                     }
-                    catch {
-                        console.error(`Failed to unban user: ${user_row.userBanned}(${user_row.bannedID}) from guild: ${user_row.guildName}(${user_row.guildID})`)
-                    }
+                    catch { }
                 }
             }
         )

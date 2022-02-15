@@ -18,28 +18,17 @@ export default {
             guild.guildName,
             interaction.guild.iconURL(),
             user,
-            interaction.user.tag
         );
 
         if (!userIsKicked)
             return interaction.reply({
-                content: "I was not able kick this user. <:error:940632365921873980>",
+                content: "> I was not able kick this user. <:error:940632365921873980>",
                 ephemeral: true
             })
 
         interaction.reply({
-            embeds: [{
-                color: '#f97316',
-                author: {
-                    name: `${guild.guildName}`,
-                    icon_url: interaction.guild.iconURL()
-                },
-                description: `<@${user.id}> has been **removed**${reason ? `, reason: \`${reason}\`` : ""}`,
-                timestamp: new Date(),
-                footer: {
-                    text: `Removed by ${interaction.user.tag}`
-                }
-            }], ephemeral: silent === "true" ? true : false
+            content: `> <:error:940632365921873980> <@${user.id}> has been **Kicked** ${reason ? `\`reason:\` ${reason}.` : ""}`,
+            ephemeral: silent === "true" ? true : false
         })
 
         return;
