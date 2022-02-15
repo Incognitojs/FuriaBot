@@ -129,7 +129,7 @@ export default class GuildHandler {
         return new Promise(async resolve => {
             await user.send(`> <:error:940632365921873980> You have been **Kicked** from the guild **${guildName}** ${reason ? `\`reason:\` ${reason}` : ""}`).catch(() => null)         
             await user.kick().catch(() => resolve(false));
-            resolve(true)            
+            resolve(true)           
         })
     }
 
