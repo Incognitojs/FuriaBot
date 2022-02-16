@@ -1,14 +1,13 @@
 import { monthYear } from '../util/time.js';
 import { Pool } from 'mysql';
-import { discordBot } from '../index.js';
+import { discordBot,db } from '../index.js';
 import { GuildMember, Role, Permissions } from 'discord.js';
 import { getUnmuteTime, getCurrentUnixTimestampInSeconds } from '../util/convertTime.js';
 import type { guild, MuteOptions } from '../../index';
 
 export default class GuildHandler {
     public guildContents: Array<guild>;
-
-    constructor(private db: Pool) { };
+    public db: Pool = db.database
 
     /**
      * Getting every guild stored in database
