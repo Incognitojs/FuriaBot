@@ -1,4 +1,4 @@
-import { Client, GuildMember, Role, } from 'discord.js';
+import { Client, CommandInteraction, GuildMember, Role, } from 'discord.js';
 
 export interface Client extends Client {
     commands: any[];
@@ -19,6 +19,7 @@ export type guild = {
 export type MuteOptions = {
     member: GuildMember,
     mutedRole: Role,
+    interaction: CommandInteraction
     reason?: string,
     duration?: string
 }

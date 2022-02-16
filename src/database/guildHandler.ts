@@ -109,20 +109,36 @@ export default class GuildHandler {
 
 
     /**
+     * Handling errors.
+     */
+    handleError(error, interaction) {
+        const reply = (text: string) => interaction.reply({content:text,ephemeral: true})
+        
+        switch (error.message) {
+            case "Missing Access":
+                return reply("I do not have permission to mute")
+            case "convert_time":
+                return reply("The duration specified was not in the correct format.")
+            case "HASMUTEDROLE":
+                return reply("This user is already muted.")
+        }
+    }
+
+    /**
      * Muting a user
     */
     muteUser(options: MuteOptions) {
-        let { member, mutedRole, reason, duration } = options;
+        let { member, mutedRole, interaction, reason, duration } = options;
         return new Promise(async (resolve, reject) => {
             if (member.roles.cache.find(role => role.name === "muted")) 
-                return reject({ message: "HASROLE" })
+                return reject(this.handleError({message: "HASMUTEDROLE"}, interaction));
 
             try {
                 await member.roles.add(mutedRole);
                 await member.send(`> <:error:940632365921873980> You have been **muted** in the guild **${member.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${duration ? `\`duration:\` ${duration}` : ""}`)
             }
             catch (error) {
-                return reject(error);
+                return reject(this.handleError(error, interaction));
             }
 
             this.db.query(
