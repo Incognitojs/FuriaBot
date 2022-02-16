@@ -1,10 +1,10 @@
-const getCurrentUnixTimestamp = () => Date.now();
+export const getCurrentUnixTimestampInSeconds = () => Date.now() / 1000;
 
 export const durationChoiceConvert = (durationChoice: string) => {
 
     let duration: number;
     let durationString: string;
-    const currentDate = getCurrentUnixTimestamp() / 1000;
+    const currentDate = getCurrentUnixTimestampInSeconds();
 
     switch (durationChoice) {
         case '1d':
@@ -52,10 +52,33 @@ export const durationChoiceConvert = (durationChoice: string) => {
 
 }
 
-export const convertMuteTime = (durationString: string) => {
-
-    console.log(durationString)
-
-
-    return;
+export const getUnmuteTime = (durationString: string): Promise<number> => {
+    const regex = /(\d+)\s?([a-zA-Z]+)/;
+    return new Promise((resolve, reject) => {
+        const matches = regex.exec(durationString);
+        !matches && reject("convert_time")
+        const givenTime: number = parseInt(matches[0]);
+        switch (matches[2].toLowerCase()) {
+            case "weeks":
+            case "week":
+            case "w":
+                resolve(givenTime * 604800)
+            case "m":
+            case "minute":
+            case "mins":
+            case "min":
+            case "minutes":
+                resolve(givenTime * 60)
+            case "h":
+            case "hour":
+            case "hours":
+                resolve(givenTime * 3600);
+            case "d":
+            case "days":
+            case "day":
+                resolve(givenTime * 86400)
+            default:
+                reject("convert_time");
+        }
+    })
 };

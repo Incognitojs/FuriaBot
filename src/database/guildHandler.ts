@@ -1,9 +1,9 @@
 import { monthYear } from '../util/time.js';
 import { Pool } from 'mysql';
 import { discordBot } from '../index.js';
-import { GuildMember, Role } from 'discord.js';
-import { convertMuteTime } from '../util/convertTime.js';
-import type { guild } from '../../index';
+import { GuildMember, Role, Permissions } from 'discord.js';
+import { getUnmuteTime, getCurrentUnixTimestampInSeconds } from '../util/convertTime.js';
+import type { guild, MuteOptions } from '../../index';
 
 export default class GuildHandler {
     public guildContents: Array<guild>;
@@ -111,25 +111,38 @@ export default class GuildHandler {
     /**
      * Muting a user
     */
-    muteUser(member: GuildMember, mutedRole: Role | undefined, duration: string, reason: string) {
-        return new Promise(async resolve => {
-           // await member.roles.add(mutedRole).catch(() => resolve(false));
-            await member.send(`> <:error:940632365921873980> You have been **muted** in the guild **${member.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${duration ? `\`duration:\` ${duration}` : ""}`).catch(() => null);
-            
-            convertMuteTime(duration)
+    muteUser(options: MuteOptions) {
+        let { member, mutedRole, reason, duration } = options;
+        return new Promise(async (resolve, reject) => {
+            if (member.roles.cache.find(role => role.name === "muted")) 
+                return reject({ message: "HASROLE" })
+
+            try {
+                await member.roles.add(mutedRole);
+                await member.send(`> <:error:940632365921873980> You have been **muted** in the guild **${member.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${duration ? `\`duration:\` ${duration}` : ""}`)
+            }
+            catch (error) {
+                return reject(error);
+            }
+
+            this.db.query(
+                "USE discord; INSERT IGNORE into muted (guildID, mutedID, reason, duration), VALUES(?,?,?,?)",
+                [member.guild.id, member.id, reason, Math.floor(Date.now() / 1000 + await getUnmuteTime(duration))]
+            )
 
             resolve(true);
         })
     }
+
 
     /**
      * Kicking a user.
      */
     kickUser(reason: string | undefined, guildName: string, guildIconUrl: string, user: GuildMember) {
         return new Promise(async resolve => {
-            await user.send(`> <:error:940632365921873980> You have been **Kicked** from the guild **${guildName}** ${reason ? `\`reason:\` ${reason}` : ""}`).catch(() => null)         
+            await user.send(`> <:error:940632365921873980> You have been **Kicked** from the guild **${guildName}** ${reason ? `\`reason:\` ${reason}` : ""}`).catch(() => null)
             await user.kick().catch(() => resolve(false));
-            resolve(true)           
+            resolve(true)
         })
     }
 
