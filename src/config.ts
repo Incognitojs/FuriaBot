@@ -1,15 +1,14 @@
 import { PoolConfig } from "mysql";
 import { readFile } from 'fs/promises';
+import { ClientOptions, Intents, PartialTypes } from 'discord.js';
 
 export const rootGuildID: string = process.env.rootGuild;
 export const loadCommandsBoolean: boolean = process.env.loadCommandsBool === "true" ? true : false;
 export const ownerID: string = process.env.ownerID
 
-const _en_text: any = await readFile('./lang/en/commands/commands.json');
-export const en_text = JSON.parse(_en_text);
-
-const _colors: any = await readFile('./colors.json');
-export const colors = JSON.parse(_colors);
+export const en_text = JSON.parse(await readFile('./lang/en/commands/commands.json') as any)
+export const colors  = JSON.parse(await readFile('./colors.json') as any)
+export const config  = JSON.parse(await readFile('./config.json') as any)
 
 class DatabaseOptions implements PoolConfig {
     host = process.env.host;
@@ -18,7 +17,20 @@ class DatabaseOptions implements PoolConfig {
     multipleStatements = true
 }
 
-export class Options {
-    database: DatabaseOptions = new DatabaseOptions();
+class DiscordSettings implements ClientOptions {
+    partials: PartialTypes[] = ['CHANNEL']
+    intents = [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGE_TYPING
+    ]
+    disabledCommands: string[] = []
 }
+
+export class Options {
+    database = new DatabaseOptions();
+    discord = new DiscordSettings();
+};
 

@@ -1,9 +1,9 @@
-import { Client, CommandInteraction, GuildMember, Role, } from 'discord.js';
+import { CommandInteraction, GuildMember, Role, } from 'discord.js';
 
-export interface Client extends Client {
-    commands: any[];
-    commandCollection: Collection<any>;
-}
+// export class IClient extends Client {
+//     commands: any[];
+//     commandCollection: Collection<any>;
+// }
 
 export type guild = {
     guildID: string,

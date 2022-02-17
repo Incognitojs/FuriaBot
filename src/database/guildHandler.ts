@@ -1,6 +1,6 @@
 import { monthYear } from '../util/time.js';
 import { Pool } from 'mysql';
-import { discordBot,db } from '../index.js';
+import { client ,db } from '../index.js';
 import { GuildMember, Role, Permissions } from 'discord.js';
 import { getUnmuteTime, getCurrentUnixTimestampInSeconds } from '../util/convertTime.js';
 import type { guild, MuteOptions } from '../../index';
@@ -22,9 +22,9 @@ export default class GuildHandler {
                 this.guildContents = results[1];
                 return;
             }
-        )
+     )
     }
-
+   
 
     /**
      * Updating a specific guild's contents in the guildContents array.
@@ -204,7 +204,7 @@ export default class GuildHandler {
                 for (const user_row of results[1]) {
                     if (Date.now() / 1000 < user_row.duration || results[1].length === 0) return;
                     try {
-                        const guild = await discordBot.client.guilds.fetch(user_row.guildID);
+                        const guild = await client.guilds.fetch(user_row.guildID);
                         await guild.members.unban(user_row.bannedID);
 
                         this.db.query(

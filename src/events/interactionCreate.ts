@@ -1,11 +1,11 @@
 import { Interaction, Permissions, GuildMember } from 'discord.js';
 import { guildHandler } from '../index.js';
-import type { Client, guild } from '../../index';
+import type { guild } from '../../index';
 
 export default {
     name: "interactionCreate",
     once: false,
-    execute: async (interaction: Interaction, client: Client) => {
+    execute: async (interaction: Interaction, client) => {
         /**
          * Getting the guild ID of where
          * the command was ran.

@@ -1,6 +1,6 @@
 import { en_text } from '../../config.js';
 import { CommandInteraction } from 'discord.js';
-import { guildHandler } from '../../index.js';
+//import { guildHandler } from '../../index.js';
 import type { guild } from '../../../index';
 
 export default {
