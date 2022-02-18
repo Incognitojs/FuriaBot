@@ -1,19 +1,19 @@
-import { CommandInteraction } from 'discord.js';
 import { en_text } from '../../config.js';
-import { guildHandler } from '../../index.js';
+import type { CommandInteraction } from 'discord.js';
+import type FuriaBot from '../../struct/client.js';
 import type { guild } from '../../../index';
 
 
 export default {
     permissions: "KICK_MEMBERS",
     data: en_text.command.kick.data,
-    run: async (interaction: CommandInteraction, guild: guild) => {
+    run: async (interaction: CommandInteraction, guild: guild, client: FuriaBot) => {
         const reason: string = interaction.options.getString("reason");
         const silent = interaction.options.getString("silent");
         const mem = interaction.options.getUser("user");
         const user = await interaction.guild.members.fetch(mem.id);
 
-        const userIsKicked = await guildHandler.kickUser(
+        const userIsKicked = await client.guildHandler.kickUser(
             reason,
             guild.guildName,
             interaction.guild.iconURL(),

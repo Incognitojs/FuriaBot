@@ -1,23 +1,23 @@
-import { Guild, Client, User } from 'discord.js';
-import { guildHandler } from '../index.js';
+import type { Guild, User } from 'discord.js';
+import type FuriaBot from '../struct/client.js';
 import chalk from 'chalk';
 
 export default {
     name: "guildCreate",
     once: false,
-    execute: async (guild: Guild, client: Client) => {
+    execute: async (guild: Guild, client: FuriaBot) => {
         const user = await client.users.fetch(guild.ownerId).catch(console.error) as User;
         const ownerName: string = `${user.username}${user.discriminator}`;
         /**
          * Checking if the guild already has a spot in the database or not.
          */
-        const guildExists = await guildHandler.guildExistsInDatabase(guild.id);
+        const guildExists = await client.guildHandler.guildExists(guild.id);
         /**
          * If guild does not exists, 
          * then we make them a new spot in the database.
          */
         if (!guildExists) {
-            guildHandler.insertGuild(guild.id, guild.name, ownerName)
+            client.guildHandler.insertGuild(guild.id, guild.name, ownerName)
             console.log(
                 chalk.green("Joined the guild:"),
                 chalk.cyan(guild.name),

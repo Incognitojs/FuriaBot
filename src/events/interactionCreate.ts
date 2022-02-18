@@ -1,11 +1,11 @@
 import { Interaction, Permissions, GuildMember } from 'discord.js';
-import { guildHandler } from '../index.js';
+import type FuriaBot from '../struct/client.js'
 import type { guild } from '../../index';
 
 export default {
     name: "interactionCreate",
     once: false,
-    execute: async (interaction: Interaction, client) => {
+    execute: async (interaction: Interaction, client: FuriaBot) => {
         /**
          * Getting the guild ID of where
          * the command was ran.
@@ -14,7 +14,7 @@ export default {
         /**
          * Current guild.
          */
-        const guild: guild = guildHandler.guildContents.filter(item => item.guildID === guildID)[0];
+        const guild: guild = client.guildHandler.guildContents.filter(item => item.guildID === guildID)[0];
         /**
          * The member who ran the command.
          */
@@ -31,7 +31,7 @@ export default {
 
                     if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) 
                         return interaction.reply({
-                            content: `<:error:940632365921873980> I am lacking the required permission(s): **MANAG_ROLES**}`,
+                            content: `<:error:940632365921873980> I am lacking the required permission(s): **MANAGE_ROLES**}`,
                             ephemeral: true
                         })
                     
@@ -97,7 +97,7 @@ export default {
         /**
          * Running the command;
          */
-        return run(interaction, guild);
+        return run(interaction, guild, client);
 
     }
 }

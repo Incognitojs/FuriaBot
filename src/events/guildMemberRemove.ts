@@ -1,12 +1,12 @@
-import { GuildMember, Client, TextChannel } from 'discord.js';
-import { guildHandler } from '../index.js';
+import type { GuildMember, TextChannel } from 'discord.js';
+import type FuriaBot from '../struct/client';
 import type { guild } from '../../index';
 
 export default {
     name: "guildMemberRemove",
     once: false,
-    execute: (member: GuildMember, client: Client) => {
-        const guild: guild = guildHandler.guildContents.filter(item => item.guildID === member.guild.id)[0];
+    execute: (member: GuildMember, client: FuriaBot) => {
+        const guild: guild = client.guildHandler.guildContents.filter(item => item.guildID === member.guild.id)[0];
 
         let leaveMsg: string;
 

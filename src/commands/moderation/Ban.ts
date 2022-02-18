@@ -1,13 +1,13 @@
 import { CommandInteraction } from 'discord.js';
 import { en_text } from '../../config.js';
-import { guildHandler } from '../../index.js'
 import { durationChoiceConvert } from '../../util/convertTime.js';
 import type { guild } from '../../../index';
+import type FuriaBot from '../../struct/client.js';
 
 export default {
     permissions: "BAN_MEMBERS",
     data: en_text.command.ban.data,
-    run: async (interaction: CommandInteraction, guild: guild) => {
+    run: async (interaction: CommandInteraction, guild: guild, client: FuriaBot) => {
         const reason: string = interaction.options.getString("reason");
         const silent = interaction.options.getString("silent");
         const durationChoice = interaction.options.getString("duration");
@@ -16,7 +16,7 @@ export default {
 
         const { duration, durationString } = durationChoiceConvert(durationChoice);
         const banIsPermanent: boolean = durationString === "Permanent" ? true : false
-        const userIsBanned = await guildHandler.banUser(
+        const userIsBanned = await client.guildHandler.banUser(
             user,
             duration,
             interaction.user.tag,

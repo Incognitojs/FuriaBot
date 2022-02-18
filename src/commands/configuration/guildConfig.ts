@@ -1,14 +1,15 @@
 import { CommandInteraction, Channel } from 'discord.js';
-import { guildHandler } from '../../index.js';
 import { en_text } from '../../config.js';
 import type { guild } from '../../../index';
+import type FuriaBot from '../../struct/client.js';
 
 export default {
     permissions: ["ADMINISTRATOR"],
     data: en_text.command.config.data,
-    run: (interaction: CommandInteraction, guild: guild) => {
-        let choice: string;
-        let message: string;
+    run: (interaction: CommandInteraction, guild: guild, client: FuriaBot) => {
+
+        let choice:  string; 
+        let message: string; 
         let channel: Channel;
 
         switch (interaction.options.getSubcommandGroup()) {
@@ -33,7 +34,7 @@ export default {
                                 ephemeral: true
                             })
 
-                        guildHandler.updateWelcomeMessageId(interaction.guild.id, choice === "enable" ? channel.id : false)
+                        client.guildHandler.updateWelcomeMessageId(interaction.guild.id, choice === "enable" ? channel.id : false)
 
                         return interaction.reply({
                             embeds: [{
@@ -56,7 +57,7 @@ export default {
                                 ephemeral: true
                             })
 
-                        guildHandler.updateWelcomeMessage(interaction.guild.id, message, choice);
+                        client.guildHandler.updateWelcomeMessage(interaction.guild.id, message, choice);
 
                         return interaction.reply({
                             embeds: [{
