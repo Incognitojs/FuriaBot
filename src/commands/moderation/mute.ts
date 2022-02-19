@@ -2,7 +2,7 @@ import { en_text }                 from '../../config.js';
 import type { CommandInteraction } from 'discord.js';
 import type { guild }              from '../../../index';
 import type FuriaBot               from '../../struct/client.js';
-import { db } from '../../index.js';
+import { db }                      from '../../index.js';
 import { getUnmuteTime }           from '../../util/time/convertTime.js';
 
 export default {
