@@ -1,14 +1,23 @@
-import { Collection, Client } from 'discord.js';
-import { readdir } from 'fs/promises';
-import { lstatSync } from 'fs';
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
-import { rootGuildID, loadCommandsBoolean, Options, config } from '../config.js';
-import _dirname from '../util/dirname.js';
-import GuildHandler from './guildHandler.js';
-import path from 'path';
-import chalk from 'chalk';
+import { 
+    rootGuildID,
+    loadCommandsBoolean, 
+    Options, 
+    config 
+}                              from '../config.js';
+import { Collection, Client }  from 'discord.js';
+import { readdir }             from 'fs/promises';
+import { lstatSync }           from 'fs';
+import { REST }                from '@discordjs/rest';
+import { Routes }              from 'discord-api-types/v9';
+import { logger }              from '../index.js';
+import _dirname                from '../util/dirname.js';
+import GuildHandler            from './guildHandler.js';
+import path                    from 'path';
 
+class Iemojis {
+    error   = "<:error:940632365921873980>";
+    success = "<a:success:940632460193067059>";
+}
 
 export default class FuriaBot extends Client {
 
@@ -16,24 +25,26 @@ export default class FuriaBot extends Client {
     public commandCollection: any
     public commands:          any[]
     public guildHandler:      GuildHandler
+    public Iemojis:           Iemojis
 
     constructor(options: Options['discord']) {
         super(options)
 
         this.token             = process.env.token
-        this.guildHandler      = new GuildHandler(this)
         this.disabledCommands  = config.disabledCommands || []
+        this.guildHandler      = new GuildHandler(this)
+        this.Iemojis           = new Iemojis
         this.commandCollection = new Collection()
         this.commands          = []
 
         this.on("ready", async () => {
             this.handleEvents();
             this.loadCommands();
-           console.log(await this.guildHandler.getAllGuildContent())
+            logger.discordReady(this.user.tag)
+            await this.guildHandler.getAllGuildContent()
+            this.guildHandler.handleSentenceTime()
         })
     }
-
-
 
     public async handleEvents() {
         for (const file of (await readdir('./dist/events')).filter(file => file.endsWith(".js"))) {

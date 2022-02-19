@@ -1,7 +1,7 @@
 import type { CommandInteraction, ColorResolvable } from "discord.js";
-import type { guild } from '../../../index';
-import { en_text, colors } from '../../config.js';
-import fetch from 'node-fetch'
+import type { guild }                               from '../../../index';
+import { en_text, colors }                          from '../../config.js';
+import fetch                                        from 'node-fetch'
 
 export default {
     data: en_text.command.cat.data,

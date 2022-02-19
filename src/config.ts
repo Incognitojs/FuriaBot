@@ -1,10 +1,10 @@
-import { PoolConfig } from "mysql";
-import { readFile } from 'fs/promises';
+import { PoolConfig }                           from "mysql";
+import { readFile }                             from 'fs/promises';
 import { ClientOptions, Intents, PartialTypes } from 'discord.js';
 
-export const rootGuildID: string = process.env.rootGuild;
-export const loadCommandsBoolean: boolean = process.env.loadCommandsBool === "true" ? true : false;
-export const ownerID: string = process.env.ownerID
+export const rootGuildID          = process.env.rootGuild;
+export const loadCommandsBoolean  = process.env.loadCommandsBool === "true" ? true : false;
+export const ownerID              = process.env.ownerID
 
 export const en_text = JSON.parse(await readFile('./lang/en/commands/commands.json') as any)
 export const colors  = JSON.parse(await readFile('./colors.json') as any)
