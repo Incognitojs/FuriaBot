@@ -3,7 +3,7 @@ import {
     loadCommandsBoolean, 
     Options, 
     config 
-}                              from '../../config.js';
+}                              from '../config.js';
 import { Collection, Client }  from 'discord.js';
 import { readdir }             from 'fs/promises';
 import { lstatSync }           from 'fs';

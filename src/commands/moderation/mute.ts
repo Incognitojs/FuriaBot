@@ -1,4 +1,4 @@
-import { en_text }                 from '../../config.js';
+import { en_text }                 from '../../struct/config.js';
 import type { CommandInteraction } from 'discord.js';
 import type { guild }              from '../../../index';
 import type FuriaBot               from '../../struct/discord/client.js';

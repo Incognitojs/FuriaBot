@@ -1,5 +1,5 @@
 import { CommandInteraction }    from 'discord.js';
-import { en_text }               from '../../config.js';
+import { en_text }               from '../../struct/config.js';
 import { durationChoiceConvert } from '../../util/time/convertTime.js';
 import type { guild }            from '../../../index';
 import type FuriaBot             from '../../struct/discord/client.js';

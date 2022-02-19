@@ -1,6 +1,6 @@
 import type { Message } from 'discord.js';
 import type FuriaBot    from '../struct/discord/client.js';
-import { ownerID }      from '../config.js';
+import { ownerID }      from '../struct/config.js';
 
 export default {
     name: "messageCreate",

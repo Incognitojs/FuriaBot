@@ -2,7 +2,7 @@ import 'dotenv/config';
 import Database    from './struct/database/pool.js';
 import FuriaBot    from "./struct/discord/client.js";
 import Logger      from "./util/Logger.js";
-import { Options } from './config.js';
+import { Options } from './struct/config.js';
 import { Pool }    from 'mysql';
 
 const options:       Options             = new Options;
