@@ -116,7 +116,7 @@ export default class GuildHandler {
             switch (type) {
                 case "mute":
                     const member = await guild.members.fetch(userId);
-                    member.roles.remove(guild.roles.cache.find(role => role.name === "muted"));
+                    await member.roles.remove(guild.roles.cache.find(role => role.name === "muted"));
                     db.query("USE discord; DELETE FROM muted WHERE guildID = ? AND mutedID = ?", [guildId, userId]);
                     await member.send(`> ${this.client.Iemojis.success} You have been **unmuted** from the guild **${guild.name}** `).catch(() => {});
                     break;

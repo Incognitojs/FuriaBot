@@ -62,6 +62,7 @@ export const getUnmuteTime = (durationString: string): Promise<number> => {
             case "s":
             case "seconds":
             case "secs":
+            case "sec":
                 resolve(givenTime);
 
             case "m":

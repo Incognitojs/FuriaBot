@@ -42,9 +42,9 @@ export default class FuriaBot extends Client {
 
         this.on("ready", async () => {
             this.handleEvents();
-            this.loadCommands();
-            logger.discordReady(this.user.tag)
+            await this.loadCommands();
             await this.guildHandler.getAllGuildContent()
+            logger.discordReady(this.user.tag)
             this.guildHandler.handleSentenceTime()
         })
     }
@@ -58,28 +58,26 @@ export default class FuriaBot extends Client {
         }
     }
 
-    public async loadCommands() {
-        for (const element of await readdir('./dist/commands')) {
-            element.endsWith("js") && this._loadCmd(element, "not dir");
-            if (lstatSync(path.join(_dirname, '../commands', element)).isDirectory()) {
-                for (const file of (await readdir(`./dist/commands/${element}`)).filter(file => file.endsWith(".js")))
-                    this._loadCmd(file, element)
-            }
-        }
-    }
-
     private async _loadCmd(file: string, dir?: string) {
-        const command = dir ? await import(`../../commands/${dir}/${file}`) : await import(`../../commands/${file}`)
+        const command = dir ? await import(`../../commands/${dir}/${file}`) : await import(`../../commands/${file}`)        
         this.commands.push(command.default.data);
         this.commandCollection.set(command.default.data.name, command);
+    
+    }
+    
+    public async loadCommands() {
+        for (const element of await readdir('./dist/commands')) {
+            element.endsWith("js") && await this._loadCmd(element, "not dir");
+            if (lstatSync(path.join(_dirname, '../commands', element)).isDirectory()) {
+                for (const file of (await readdir(`./dist/commands/${element}`)).filter(file => file.endsWith(".js")))
+                    await this._loadCmd(file, element)
+            }
+        };
+
         const rest: REST = new REST({ version: '9' }).setToken(this.token);
         const botID = this.user.id
-        return async () => {
-            await rest.put(Routes.applicationGuildCommands(botID, rootGuildID), { body: this.commands }).catch(console.error);
-            loadCommandsBoolean && await rest.put(Routes.applicationCommands(botID), { body: [] }).catch(console.error);
-        }
+    
+        await rest.put(Routes.applicationGuildCommands(botID, rootGuildID), { body: this.commands }).catch(console.error);
+        loadCommandsBoolean && await rest.put(Routes.applicationCommands(botID), { body: [] }).catch(console.error);
     }
-
-
-
 }

@@ -116,6 +116,21 @@
                 ]
             }
         },
+        "unmute": {
+            "data": {
+                "name": "unmute",
+                "type": 1,
+                "description": "unmute a user from the guild",
+                "options": [
+                    {
+                        "name": "user",
+                        "description": "the user you would like to unmute",
+                        "type": 6,
+                        "required": true
+                    }
+                ]
+            }            
+        },
         "kick": {
             "data": {
                 "name": "kick",

@@ -41,7 +41,7 @@ export default {
         }
 
         catch (err) { 
-            if (err.message === "convert_time") return client.ErrorHandler.durationFormat(interaction); 
+            if (err === "convert_time") return client.ErrorHandler.durationFormat(interaction); 
             return client.ErrorHandler.mute(interaction);
          };
 
