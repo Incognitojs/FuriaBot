@@ -1,5 +1,5 @@
 import type { GuildMember, TextChannel } from 'discord.js';
-import type FuriaBot from '../struct/client';
+import type FuriaBot from '../struct/discord/client';
 import type { guild } from '../../index';
 
 export default {

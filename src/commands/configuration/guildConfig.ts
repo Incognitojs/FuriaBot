@@ -1,7 +1,7 @@
 import { CommandInteraction, Channel } from 'discord.js';
 import { en_text }                     from '../../config.js';
 import type { guild }                  from '../../../index';
-import type FuriaBot                   from '../../struct/client.js';
+import type FuriaBot                   from '../../struct/discord/client.js';
 
 export default {
     permissions: ["ADMINISTRATOR"],

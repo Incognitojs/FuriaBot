@@ -1,13 +1,12 @@
-import { monthYear }     from '../util/time/time.js';
-import { db, logger }    from '../index.js';
-
-import type FuriaBot               from './client.js';
-import type { guild }              from '../../index';
+import { monthYear }     from '../../util/time/time.js';
+import { db }            from '../../index.js';
+import type { guild }    from '../../../index';
+import type FuriaBot     from './client.js';
 
 export default class GuildHandler {
     public guildContents: Array<guild>;
 
-    constructor(public client: FuriaBot) { };
+    constructor(private client: FuriaBot) { };
 
     /**
      * Getting all guilds that are stored in the database then
@@ -106,14 +105,12 @@ export default class GuildHandler {
         )
     }
 
-
-
     private timesUp = (duration: number) => {
         if (Date.now() / 1000 < duration) return false;
         return true;
     }
 
-    private liftSentence = async (guildId: string, userId: string, type: string) => {
+    public liftSentence = async (guildId: string, userId: string, type: string) => {
         try {
             const guild  = await this.client.guilds.fetch(guildId);
             switch (type) {
@@ -129,7 +126,7 @@ export default class GuildHandler {
                     break;
             }
         }
-        catch { logger.liftSentenceError(guildId, userId, type) };
+        catch { this.client.ErrorHandler.liftSentence(guildId, userId) };
     }
 
     /**

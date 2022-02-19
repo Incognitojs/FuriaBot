@@ -2,7 +2,7 @@ import { CommandInteraction }    from 'discord.js';
 import { en_text }               from '../../config.js';
 import { durationChoiceConvert } from '../../util/time/convertTime.js';
 import type { guild }            from '../../../index';
-import type FuriaBot             from '../../struct/client.js';
+import type FuriaBot             from '../../struct/discord/client.js';
 import { db }                    from '../../index.js';
 
 export default {
