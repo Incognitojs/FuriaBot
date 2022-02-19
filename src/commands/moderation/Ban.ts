@@ -10,11 +10,6 @@ export default {
     data: en_text.command.ban.data,
     run: async (interaction: CommandInteraction, guild: guild, client: FuriaBot) => {
 
-        const banError = () => interaction.reply({
-            content: `> ${client.Iemojis.error} I was not able to **ban** this user.`,
-            ephemeral: true
-        }) 
-
         const reason            = interaction.options.getString("reason");
         const silent            = interaction.options.getString("silent");
         const durationChoice    = interaction.options.getString("duration");
@@ -26,14 +21,14 @@ export default {
         const banIsPermanent: boolean = durationString === "Permanent"
                                                                 ? true 
                                                                 : false
+        
+        if (!member.bannable) return client.ErrorHandler.ban(interaction);
 
         await user.send(`> ${client.Iemojis.error} You have been ${banIsPermanent ? "**Permanently**" : ""} **Banned** from the guild **${member.guild.name}** ${reason ? `\`reason:\` ${reason}.` : ""} ${!banIsPermanent ? `\`Duration\`: ${durationString}` : ""}`).catch(() => {});
 
         try { 
 
-            if (!member.bannable) return banError();
-
-            //await member.ban();
+            await member.ban();
 
             db.query(
                 "USE discord; INSERT IGNORE INTO banned (guildID,guildName,bannedID,userBanned,bannedBy,reason,duration) VALUES(?,?,?,?,?,?,?)",
@@ -51,7 +46,7 @@ export default {
 
         }
 
-        catch { return banError() }
+        catch { return client.ErrorHandler.ban(interaction); }
         
     }
 }

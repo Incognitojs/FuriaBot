@@ -11,9 +11,9 @@ export const colors  = JSON.parse(await readFile('./colors.json') as any)
 export const config  = JSON.parse(await readFile('./config.json') as any)
 
 class DatabaseOptions implements PoolConfig {
-    host = process.env.host;
-    user = process.env.user;
-    password = process.env.pass;
+    host               = process.env.host;
+    user               = process.env.user;
+    password           = process.env.pass;
     multipleStatements = true
 }
 
@@ -31,6 +31,6 @@ class DiscordSettings implements ClientOptions {
 
 export class Options {
     database = new DatabaseOptions();
-    discord = new DiscordSettings();
+    discord  = new DiscordSettings();
 };
 
