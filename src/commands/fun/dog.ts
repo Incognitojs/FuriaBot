@@ -4,7 +4,7 @@ import { en_text, colors }                          from '../../struct/config.js
 import fetch                                        from 'node-fetch'
 
 export default {
-    data: en_text.command.cat.data,
+    data: en_text.command.dog.data,
     run: async (interaction: CommandInteraction, guild: guild) => {
         const _data = await fetch('https://api.thedogapi.com/v1/images/search');
         const data: any = await _data.json();
