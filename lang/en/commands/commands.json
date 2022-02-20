@@ -255,6 +255,13 @@
                 "type": 1,
                 "description": "Get a random cat image."
             }
+        },
+        "dog": {
+            "data": {
+                "name": "dog",
+                "type": 1,
+                "description": "Get a random dog image."
+            }
         }
     }
 }
